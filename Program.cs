@@ -10,25 +10,41 @@ namespace LeetCodeAtoi
             int result = 0;
             var solution = new Solution();
 
-            result = solution.myAtoi("");
+            result = solution.MyAtoi("");
             Debug.Assert(result == 0);
 
-            result = solution.myAtoi("    ");
+            result = solution.MyAtoi("    ");
             Debug.Assert(result == 0);
 
-            result = solution.myAtoi("a12345");
+            result = solution.MyAtoi("a12345");
             Debug.Assert(result == 0);
-            
-            result = solution.myAtoi("12345");
+
+            result = solution.MyAtoi("12345");
             Debug.Assert(result == 12345);
 
-            result = solution.myAtoi("+12345");
+            result = solution.MyAtoi("+12345");
             Debug.Assert(result == 12345);
 
-            result = solution.myAtoi("-12345");
+            result = solution.MyAtoi("-12345");
             Debug.Assert(result == -12345);
 
+            result = solution.MyAtoi("-");
+            Debug.Assert(result == 0);
 
+            result = solution.MyAtoi("+");
+            Debug.Assert(result == 0);
+
+            result = solution.MyAtoi("+");
+            Debug.Assert(result == 0);
+
+            result = solution.MyAtoi("-91283472332");
+            Debug.Assert(result == int.MinValue);
+
+            result = solution.MyAtoi("-10000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000522545459");
+            Debug.Assert(result == int.MinValue);
+
+            result = solution.MyAtoi("+");
+            Debug.Assert(result == 0);
 
         }
     }
