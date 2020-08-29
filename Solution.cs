@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 using System.Text;
 
 namespace LeetCodeAtoi
@@ -19,6 +20,7 @@ namespace LeetCodeAtoi
 
             var firstChar = trimmed[0];
             int numberStart = 0;
+
             if (firstChar == '-')
             {
                 numberStart = 1;
@@ -30,37 +32,67 @@ namespace LeetCodeAtoi
                 numberStart = 1;
             }
 
+            if (numberStart>=trimmed.Length || !char.IsDigit(trimmed[numberStart]))
+                return 0;
+
             for (int i=numberStart; i<trimmed.Length && trimmed[i]=='0'; i++)
                 numberStart++;
 
-            var numbers = new Stack<int>();
-            for (int i= numberStart; i < trimmed.Length && char.IsDigit(trimmed[i]); i++)
-            {
-                numbers.Push(trimmed[i]-ASCII_FOR_ZERO);
-            }
-
-            if (numbers.Count == 0)
+            // if the string is all zeroes then numberStart will exceed trimmed.Length
+            if (numberStart >= trimmed.Length)
                 return 0;
 
-            if (numbers.Count > 10)
+            if (!char.IsDigit(trimmed[numberStart]))
+                return 0;
+
+            int numberEnd=numberStart;
+            for (int i = numberStart+1; i < trimmed.Length && char.IsDigit(trimmed[i]); i++)
             {
-                return sign == 1 ? Int32.MaxValue : Int32.MinValue;
+                numberEnd=i;
+            }
+
+            //var numbers = new Stack<int>();
+            //for (int i= numberStart; i < trimmed.Length && char.IsDigit(trimmed[i]); i++)
+            //{
+            //    numbers.Push(trimmed[i]-ASCII_FOR_ZERO);
+            //}
+
+            if (numberEnd - numberStart > 10)
+            {
+                return sign == 1 ? int.MaxValue : int.MinValue;
             }
 
             long multiplier = 1;
             long result = 0;
-            while (numbers.TryPop(out int value))
+
+            for (int i = numberEnd; i >= numberStart; i--)
             {
-                result += value * multiplier;
+                result += (trimmed[i] - ASCII_FOR_ZERO) * multiplier;
 
                 if (result * sign < int.MinValue)
                     return int.MinValue;
-                
+
                 if (result * sign > int.MaxValue)
                     return int.MaxValue;
 
                 multiplier *= 10;
             }
+
+
+            //long multiplier = 1;
+            //long result = 0;
+            //while (numbers.TryPop(out int value))
+            //{
+            //    result += value * multiplier;
+
+            //    if (result * sign < int.MinValue)
+            //        return int.MinValue;
+                
+            //    if (result * sign > int.MaxValue)
+            //        return int.MaxValue;
+
+            //    multiplier *= 10;
+            //}
 
             return (int)result * sign;
         }
